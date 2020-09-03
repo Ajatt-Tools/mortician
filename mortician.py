@@ -56,7 +56,7 @@ def agains_in_the_timeframe(card_id):
 
 def bury_card(card_id):
     mw.checkpoint(_("Bury difficult card"))
-    mw.col.sched.buryCards([card_id])
+    mw.col.sched.buryCards([card_id], manual = False)
 
 def decide_bury(reviewer, card, ease):
     """Bury card if it was answered 'again' too many times within the specified time."""
