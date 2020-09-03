@@ -9,6 +9,7 @@ config = mw.addonManager.getConfig(__name__)
 again_threshold     = config['again_threshold'] if 'again_threshold' in config else 5
 timeframe           = config['timeframe'] if 'timeframe' in config else 24
 count_from_daystart = config['count_from_daystart'] if 'count_from_daystart' in config else False
+again_notify        = config['again_notify'] if 'again_notify' in config else False
 
 def milliseconds_to_hours(hours):
     return int(round(hours / 1000.0 / 3600.0))
@@ -67,10 +68,13 @@ def decide_bury(reviewer, card, ease):
     agains = agains_in_the_timeframe(card.id)
     time_passed = time_passed_hours()
 
-    print(f"Card {card.id} was answered again {agains} times in the past {time_passed} hours.")
+    info = f"Card {card.id} was answered again {agains} times in the past {time_passed} hours."
+    print(info)
 
     if agains >= again_threshold:
         bury_card(card.id)
         tooltip(f"Card buried because it was answered again {agains} times in the past {time_passed} hours.")
+    elif again_notify == True:
+        tooltip(info)
 
 gui_hooks.reviewer_did_answer_card.append(decide_bury)
