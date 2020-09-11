@@ -8,8 +8,11 @@ gets buried automatically. You can tweak these values in the config.
 
 Inspired by [DA KILL Z0NE](https://ankiweb.net/shared/info/1565222544).
 ## Installation
-* Install from [AnkiWeb](https://ankiweb.net/shared/info/1255924302)
-* Manual installation: ```git clone 'https://github.com/Ajatt-Tools/mortician.git' ~/.local/share/Anki2/addons21/mortician```
+Install from [AnkiWeb](https://ankiweb.net/shared/info/1255924302),
+or manually:
+```
+git clone 'https://github.com/Ajatt-Tools/mortician.git' ~/.local/share/Anki2/addons21/mortician
+```
 ## Configuration
 To configure the add-on, open the Anki Add-on Menu
 via `Tools->Add-ons` and select `mortician`.
