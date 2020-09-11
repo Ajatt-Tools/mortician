@@ -1,3 +1,4 @@
+# mortician
 Do you hate failing the same card over and over?
 With this add-on you can bury it after a certain number of failed attempts.
 By default any card that has been answered 'again' at least 5 times for the past 24 hours
