@@ -6,10 +6,11 @@ import time
 
 config = mw.addonManager.getConfig(__name__)
 
-again_threshold: int = config['again_threshold'] if 'again_threshold' in config else 5
-timeframe: int = config['timeframe'] if 'timeframe' in config else 24
-count_from_daystart: bool = config['count_from_daystart'] if 'count_from_daystart' in config else False
-again_notify: bool = config['again_notify'] if 'again_notify' in config else False
+again_threshold: int = config.get('again_threshold', 5)
+timeframe: int = config.get('timeframe', 24)
+count_from_daystart: bool = config.get('count_from_daystart', False)
+again_notify: bool = config.get('again_notify', False)
+tag_on_bury: str = config.get('tag_on_bury', "potential_leech")
 
 
 def milliseconds_to_hours(milliseconds) -> int:
