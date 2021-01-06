@@ -1,3 +1,4 @@
+from anki.notes import Note
 from aqt import gui_hooks
 from aqt import mw
 from aqt.utils import tooltip
@@ -55,7 +56,7 @@ def time_passed_hours() -> int:
         return timeframe
 
 
-def agains_in_the_timeframe(card_id) -> int:
+def agains_in_the_timeframe(card_id: int) -> int:
     # id: epoch-milliseconds timestamp of when you did the review
     # ease: which button you pushed to score your recall. ('again' == 1)
     return mw.col.db.scalar(
@@ -68,6 +69,12 @@ def agains_in_the_timeframe(card_id) -> int:
 def bury_card(card_id: int) -> None:
     mw.checkpoint(_("Bury difficult card"))
     mw.col.sched.buryCards([card_id], manual=False)
+
+
+def decide_tag(note: Note) -> None:
+    if tag_on_bury and not note.hasTag(tag_on_bury):
+        note.addTag(tag_on_bury)
+        note.flush()
 
 
 def decide_bury(reviewer, card, ease) -> None:
@@ -85,6 +92,7 @@ def decide_bury(reviewer, card, ease) -> None:
 
     if agains >= again_threshold:
         bury_card(card.id)
+        decide_tag(card.note())
         tooltip(f"Card buried because it was answered again {agains} times in the past {time_passed} hours.")
     elif again_notify is True:
         tooltip(info)

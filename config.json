@@ -1,1 +1,7 @@
-{ "again_threshold": 5, "timeframe": 24, "count_from_daystart": false, "again_notify": false}
+{
+  "again_threshold": 5,
+  "timeframe": 24,
+  "count_from_daystart": false,
+  "again_notify": false,
+  "tag_on_bury": "potential_leech"
+}
