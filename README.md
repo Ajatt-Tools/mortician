@@ -1,4 +1,9 @@
 # mortician
+[![Rate on AnkiWeb](https://glutanimate.com/logos/ankiweb-rate.svg)](https://ankiweb.net/shared/info/1255924302)
+![GitHub](https://img.shields.io/github/license/Ajatt-Tools/mortician)
+[![Patreon](https://img.shields.io/badge/support-patreon-orange)](https://www.patreon.com/tatsumoto_ren)
+[![Chat](https://img.shields.io/badge/matrix_chat-join-green.svg)](https://element.asra.gr/#/room/#djt:g33k.se)
+
 Do you hate failing the same card over and over?
 With this add-on you can bury it after a certain number of failed attempts.
 By default any card that has been answered 'again' at least 5 times for the past 24 hours
