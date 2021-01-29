@@ -1,3 +1,4 @@
+from anki.cards import Card
 from anki.notes import Note
 from aqt import gui_hooks
 from aqt import mw
@@ -77,7 +78,7 @@ def decide_tag(note: Note) -> None:
         note.flush()
 
 
-def decide_bury(reviewer, card, ease) -> None:
+def decide_bury(_, card: Card, ease: int) -> None:
     """Bury card if it was answered 'again' too many times within the specified time."""
 
     # only care about failed cards
