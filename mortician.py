@@ -6,13 +6,17 @@ from aqt.utils import tooltip
 from anki.lang import _
 import time
 
-config = mw.addonManager.getConfig(__name__)
 
-again_threshold: int = config.get('again_threshold', 5)
-timeframe: int = config.get('timeframe', 24)
-count_from_daystart: bool = config.get('count_from_daystart', False)
-again_notify: bool = config.get('again_notify', False)
-tag_on_bury: str = config.get('tag_on_bury', "potential_leech")
+def init_config():
+    _config = mw.addonManager.getConfig(__name__)
+
+    _config['again_threshold']: int = _config.get('again_threshold', 5)
+    _config['timeframe']: int = _config.get('timeframe', 24)
+    _config['count_from_daystart']: bool = _config.get('count_from_daystart', False)
+    _config['again_notify']: bool = _config.get('again_notify', False)
+    _config['tag_on_bury']: str = _config.get('tag_on_bury', "potential_leech")
+
+    return _config
 
 
 def milliseconds_to_hours(milliseconds) -> int:
@@ -44,17 +48,17 @@ def this_day_start_milliseconds() -> int:
 
 
 def threshold_time_milliseconds() -> int:
-    if count_from_daystart is True:
+    if config['count_from_daystart'] is True:
         return this_day_start_milliseconds()
     else:
-        return current_time_milliseconds() - hours_to_milliseconds(timeframe)
+        return current_time_milliseconds() - hours_to_milliseconds(config['timeframe'])
 
 
 def time_passed_hours() -> int:
-    if count_from_daystart is True:
+    if config['count_from_daystart'] is True:
         return milliseconds_to_hours(current_time_milliseconds() - this_day_start_milliseconds())
     else:
-        return timeframe
+        return config['timeframe']
 
 
 def agains_in_the_timeframe(card_id: int) -> int:
@@ -73,8 +77,8 @@ def bury_card(card_id: int) -> None:
 
 
 def decide_tag(note: Note) -> None:
-    if tag_on_bury and not note.hasTag(tag_on_bury):
-        note.addTag(tag_on_bury)
+    if config['tag_on_bury'] and not note.hasTag(config['tag_on_bury']):
+        note.addTag(config['tag_on_bury'])
         note.flush()
 
 
@@ -91,12 +95,13 @@ def decide_bury(_, card: Card, ease: int) -> None:
     info = f"Card {card.id} was answered again {agains} times in the past {time_passed} hours."
     print(info)
 
-    if agains >= again_threshold:
+    if agains >= config['again_threshold']:
         bury_card(card.id)
         decide_tag(card.note())
         tooltip(f"Card buried because it was answered again {agains} times in the past {time_passed} hours.")
-    elif again_notify is True:
+    elif config['again_notify'] is True:
         tooltip(info)
 
 
+config = init_config()
 gui_hooks.reviewer_did_answer_card.append(decide_bury)
