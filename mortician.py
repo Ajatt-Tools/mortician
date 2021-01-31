@@ -1,10 +1,11 @@
+import time
+
 from anki.cards import Card
+from anki.lang import _
 from anki.notes import Note
 from aqt import gui_hooks
 from aqt import mw
 from aqt.utils import tooltip
-from anki.lang import _
-import time
 
 
 def init_config():
@@ -98,6 +99,7 @@ def decide_bury(_, card: Card, ease: int) -> None:
     if agains >= config['again_threshold']:
         bury_card(card.id)
         decide_tag(card.note())
+        mw.col.sched._resetLrn()
         tooltip(f"Card buried because it was answered again {agains} times in the past {time_passed} hours.")
     elif config['again_notify'] is True:
         tooltip(info)
