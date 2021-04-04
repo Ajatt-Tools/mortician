@@ -5,7 +5,7 @@ from anki.lang import _
 from anki.notes import Note
 from aqt import gui_hooks
 from aqt import mw
-from aqt.utils import tooltip
+from aqt.utils import tooltip as _tooltip
 
 
 def init_config():
@@ -16,8 +16,16 @@ def init_config():
     _config['count_from_daystart']: bool = _config.get('count_from_daystart', False)
     _config['again_notify']: bool = _config.get('again_notify', False)
     _config['tag_on_bury']: str = _config.get('tag_on_bury', "potential_leech")
+    _config['disable_tooltips']: bool = _config.get('disable_tooltips', False)
 
     return _config
+
+
+def tooltip(*args, **kwargs):
+    if config['disable_tooltips'] is True:
+        return
+
+    _tooltip(*args, **kwargs)
 
 
 def milliseconds_to_hours(milliseconds) -> int:
