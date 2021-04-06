@@ -32,7 +32,7 @@ def init_config():
     _config['count_from_daystart']: bool = _config.get('count_from_daystart', False)
     _config['again_notify']: bool = _config.get('again_notify', False)
     _config['tag']: str = _config.get('tag', "potential_leech")
-    _config['flag_on_bury']: str = _config.get('flag_on_bury', "")
+    _config['flag']: str = _config.get('flag', "")
     _config['disable_tooltips']: bool = _config.get('disable_tooltips', False)
     _config['no_bury']: bool = _config.get('no_bury', False)
 
@@ -109,8 +109,8 @@ def decide_tag(note: Note) -> None:
 
 
 def decide_flag(card: Card) -> None:
-    if config['flag_on_bury']:
-        color_code = Color.num_of(config['flag_on_bury'].capitalize())
+    if config['flag']:
+        color_code = Color.num_of(config['flag'].capitalize())
         if color_code != Color.No.value:
             card.setUserFlag(color_code)
             card.flush()

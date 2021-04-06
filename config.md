@@ -13,7 +13,7 @@ anki day (usually 4AM in the morning, configured in Anki Preferences).
 * `tag` - This option lets you specify a tag that gets added to difficult cards.
 This is useful if you want to find the cards later.
 Empty string `""` disables tagging.
-* `flag_on_bury` - Like `tag_on_bury`, but adds a flag to the cards.
+* `flag` - Like `tag`, but adds a [flag](https://docs.ankiweb.net/#/studying?id=editing-and-more) to the cards.
 Possible values: `Red`, `Orange`, `Green`, `Blue`.
 Empty string = no flag.
 * `disable_tooltips` - Never show tooltips.
