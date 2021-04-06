@@ -6,7 +6,7 @@ from anki.lang import _
 from anki.notes import Note
 from aqt import gui_hooks
 from aqt import mw
-from aqt.utils import tooltip as _tooltip
+from aqt.utils import tooltip
 
 
 class Color(Enum):
@@ -38,11 +38,10 @@ def init_config():
     return _config
 
 
-def tooltip(*args, **kwargs):
-    if config['disable_tooltips'] is True:
-        return
-
-    _tooltip(*args, **kwargs)
+def notify(msg: str):
+    print(msg)
+    if config['disable_tooltips'] is False:
+        tooltip(msg)
 
 
 def milliseconds_to_hours(milliseconds) -> int:
@@ -127,16 +126,15 @@ def decide_bury(_, card: Card, ease: int) -> None:
     time_passed = time_passed_hours()
 
     info = f"Card {card.id} was answered again {agains} times in the past {time_passed} hours."
-    print(info)
 
     if agains >= config['again_threshold']:
         bury_card(card.id)
+        notify(f"Card buried because it was answered again {agains} times in the past {time_passed} hours.")
         decide_tag(card.note())
         decide_flag(card)
         mw.col.sched._resetLrn()
-        tooltip(f"Card buried because it was answered again {agains} times in the past {time_passed} hours.")
     elif config['again_notify'] is True:
-        tooltip(info)
+        notify(info)
 
 
 config = init_config()
