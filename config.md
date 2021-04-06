@@ -14,6 +14,9 @@ anki day (usually 4AM in the morning, configured in Anki Preferences).
 that is added to cards if they get buried by the add-on.
 This is useful if you want to take action to remember them better in the future.
 Empty string `""` disables tagging.
+* `flag_on_bury` - Like `tag_on_bury`, but adds a flag to the card.
+Possible values: `Red`, `Orange`, `Green`, `Blue`.
+Empty string = no flag.
 * `disable_tooltips` - Never show tooltips.
 
 ****

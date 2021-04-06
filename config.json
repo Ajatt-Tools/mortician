@@ -4,5 +4,6 @@
   "count_from_daystart": false,
   "again_notify": false,
   "tag_on_bury": "potential_leech",
+  "flag_on_bury": "",
   "disable_tooltips": false
 }

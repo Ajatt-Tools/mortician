@@ -1,4 +1,5 @@
 import time
+from enum import Enum
 
 from anki.cards import Card
 from anki.lang import _
@@ -6,6 +7,21 @@ from anki.notes import Note
 from aqt import gui_hooks
 from aqt import mw
 from aqt.utils import tooltip as _tooltip
+
+
+class Color(Enum):
+    No = 0
+    Red = 1
+    Orange = 2
+    Green = 3
+    Blue = 4
+
+    @classmethod
+    def num_of(cls, color: str) -> int:
+        for item in cls:
+            if item.name == color:
+                return item.value
+        return cls.No.value
 
 
 def init_config():
@@ -16,6 +32,7 @@ def init_config():
     _config['count_from_daystart']: bool = _config.get('count_from_daystart', False)
     _config['again_notify']: bool = _config.get('again_notify', False)
     _config['tag_on_bury']: str = _config.get('tag_on_bury', "potential_leech")
+    _config['flag_on_bury']: str = _config.get('flag_on_bury', "")
     _config['disable_tooltips']: bool = _config.get('disable_tooltips', False)
 
     return _config
@@ -91,6 +108,14 @@ def decide_tag(note: Note) -> None:
         note.flush()
 
 
+def decide_flag(card: Card) -> None:
+    if config['flag_on_bury']:
+        color_code = Color.num_of(config['flag_on_bury'].capitalize())
+        if color_code != Color.No.value:
+            card.setUserFlag(color_code)
+            card.flush()
+
+
 def decide_bury(_, card: Card, ease: int) -> None:
     """Bury card if it was answered 'again' too many times within the specified time."""
 
@@ -107,6 +132,7 @@ def decide_bury(_, card: Card, ease: int) -> None:
     if agains >= config['again_threshold']:
         bury_card(card.id)
         decide_tag(card.note())
+        decide_flag(card)
         mw.col.sched._resetLrn()
         tooltip(f"Card buried because it was answered again {agains} times in the past {time_passed} hours.")
     elif config['again_notify'] is True:
