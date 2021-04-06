@@ -34,6 +34,7 @@ def init_config():
     _config['tag_on_bury']: str = _config.get('tag_on_bury', "potential_leech")
     _config['flag_on_bury']: str = _config.get('flag_on_bury', "")
     _config['disable_tooltips']: bool = _config.get('disable_tooltips', False)
+    _config['no_bury']: bool = _config.get('no_bury', False)
 
     return _config
 
@@ -115,7 +116,7 @@ def decide_flag(card: Card) -> None:
             card.flush()
 
 
-def decide_bury(_, card: Card, ease: int) -> None:
+def on_did_answer_card(_, card: Card, ease: int) -> None:
     """Bury card if it was answered 'again' too many times within the specified time."""
 
     # only care about failed cards
@@ -128,8 +129,10 @@ def decide_bury(_, card: Card, ease: int) -> None:
     info = f"Card {card.id} was answered again {agains} times in the past {time_passed} hours."
 
     if agains >= config['again_threshold']:
-        bury_card(card.id)
-        notify(f"Card buried because it was answered again {agains} times in the past {time_passed} hours.")
+        if config['no_bury'] is False:
+            bury_card(card.id)
+            notify(f"Card buried because it was answered again {agains} times in the past {time_passed} hours.")
+
         decide_tag(card.note())
         decide_flag(card)
         mw.col.sched._resetLrn()
@@ -138,4 +141,4 @@ def decide_bury(_, card: Card, ease: int) -> None:
 
 
 config = init_config()
-gui_hooks.reviewer_did_answer_card.append(decide_bury)
+gui_hooks.reviewer_did_answer_card.append(on_did_answer_card)
