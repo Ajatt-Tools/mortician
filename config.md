@@ -10,7 +10,7 @@ and always count agains from the start of the
 anki day (usually 4AM in the morning, configured in Anki Preferences).
 * `again_notify` - Show a tooltip every time the user presses
 `again` on a card showing the card's statistics.
-* `tag_on_bury` - This option lets you specify a tag that gets added to buried cards.
+* `tag` - This option lets you specify a tag that gets added to difficult cards.
 This is useful if you want to find the cards later.
 Empty string `""` disables tagging.
 * `flag_on_bury` - Like `tag_on_bury`, but adds a flag to the cards.

@@ -31,7 +31,7 @@ def init_config():
     _config['timeframe']: int = _config.get('timeframe', 24)
     _config['count_from_daystart']: bool = _config.get('count_from_daystart', False)
     _config['again_notify']: bool = _config.get('again_notify', False)
-    _config['tag_on_bury']: str = _config.get('tag_on_bury', "potential_leech")
+    _config['tag']: str = _config.get('tag', "potential_leech")
     _config['flag_on_bury']: str = _config.get('flag_on_bury', "")
     _config['disable_tooltips']: bool = _config.get('disable_tooltips', False)
     _config['no_bury']: bool = _config.get('no_bury', False)
@@ -103,8 +103,8 @@ def bury_card(card_id: int) -> None:
 
 
 def decide_tag(note: Note) -> None:
-    if config['tag_on_bury'] and not note.hasTag(config['tag_on_bury']):
-        note.addTag(config['tag_on_bury'])
+    if config['tag'] and not note.hasTag(config['tag']):
+        note.addTag(config['tag'])
         note.flush()
 
 
