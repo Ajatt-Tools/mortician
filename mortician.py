@@ -100,6 +100,7 @@ def agains_in_the_timeframe(card_id: int) -> int:
 def bury_card(card_id: int) -> None:
     mw.checkpoint(_("Bury difficult card"))
     mw.col.sched.buryCards([card_id], manual=False)
+    mw.col.sched._resetLrn()
 
 
 def decide_tag(note: Note) -> None:
@@ -129,13 +130,11 @@ def on_did_answer_card(_, card: Card, ease: int) -> None:
     info = f"Card {card.id} was answered again {agains} times in the past {time_passed} hours."
 
     if agains >= config['again_threshold']:
+        decide_tag(card.note())
+        decide_flag(card)
         if config['no_bury'] is False:
             bury_card(card.id)
             notify(f"Card buried because it was answered again {agains} times in the past {time_passed} hours.")
-
-        decide_tag(card.note())
-        decide_flag(card)
-        mw.col.sched._resetLrn()
     elif config['again_notify'] is True:
         notify(info)
 
