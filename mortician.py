@@ -1,6 +1,4 @@
 import time
-from enum import Enum
-from typing import List
 
 from anki.cards import Card
 from anki.lang import _
@@ -9,26 +7,8 @@ from aqt import gui_hooks
 from aqt import mw
 from aqt.utils import tooltip
 
+from .color import Color
 from .config import config
-
-
-class Color(Enum):
-    No = 0
-    Red = 1
-    Orange = 2
-    Green = 3
-    Blue = 4
-
-    @classmethod
-    def num_of(cls, color: str) -> int:
-        for item in cls:
-            if item.name == color:
-                return item.value
-        return cls.No.value
-
-    @classmethod
-    def colors(cls) -> List[str]:
-        return [item.name for item in cls]
 
 
 def notify(msg: str):

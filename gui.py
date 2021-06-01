@@ -4,7 +4,7 @@ from aqt import mw
 from aqt.qt import *
 
 from .config import config
-from .mortician import Color
+from .color import Color
 
 WINDOW_TITLE = "Mortician Options"
 
