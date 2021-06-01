@@ -20,6 +20,7 @@ Empty string = no flag.
 * `no_bury` - Never bury cards.
 Though this option disables the main feature of the add-on,
 you can still use it if you want to tag or flag difficult cards, but keep them in the learning queue.
+* `ignore_new_cards` - Don't do anything to cards in the learning queue.
 
 ****
 

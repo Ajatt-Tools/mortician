@@ -35,6 +35,7 @@ def init_config():
     _config['flag']: str = _config.get('flag', "")
     _config['disable_tooltips']: bool = _config.get('disable_tooltips', False)
     _config['no_bury']: bool = _config.get('no_bury', False)
+    _config['ignore_new_cards']: bool = _config.get('ignore_new_cards', False)
 
     return _config
 
@@ -122,6 +123,9 @@ def on_did_answer_card(_, card: Card, ease: int) -> None:
 
     # only care about failed cards
     if ease != 1:
+        return
+
+    if config['ignore_new_cards'] is True and card.type < 2:
         return
 
     agains = agains_in_the_timeframe(card.id)
