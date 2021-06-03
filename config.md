@@ -4,7 +4,7 @@
 
 * `again_threshold` - How many **times** a card should be
 answered again within the given *timeframe* for it to be buried.
-* `timeframe` - How many **hours** back should answers be counted.
+* `timeframe` - How many **hours** back answers should be counted.
 * `count_from_daystart` - Ignore the *timeframe* parameter
 and always count agains from the start of the
 anki day (usually 4AM in the morning, configured in Anki Preferences).

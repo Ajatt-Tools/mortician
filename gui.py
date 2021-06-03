@@ -54,6 +54,7 @@ class SettingsDialog(QDialog):
         self.cancel_button = QPushButton("Cancel")
         self.setLayout(self.setup_layout())
         self.connect_buttons()
+        self.add_tooltips()
 
     def setup_layout(self) -> QLayout:
         layout = QVBoxLayout(self)
@@ -116,6 +117,46 @@ class SettingsDialog(QDialog):
         config['flag'] = self._flag_edit.currentText()
         mw.addonManager.writeConfig(__name__, config)
         self.accept()
+
+    def add_tooltips(self):
+        self._limits['again_threshold'].setToolTip(
+            "How many times a card should be failed until it gets buried."
+        )
+        self._limits['timeframe'].setToolTip(
+            "From how many hours ago count the answers.\n"
+            "Has no effect if \"count from daystart\" is enabled."
+        )
+        self._checkboxes['count_from_daystart'].setToolTip(
+            "Ignore the \"timeframe\" setting,\n"
+            "always count failed cards from the start of an Anki day.\n"
+            "Usually an Anki day starts at 4AM in the morning\n"
+            "but can be configured in Preferences."
+        )
+        self._checkboxes['again_notify'].setToolTip(
+            "Show card stats after every failed review.\n"
+            "This is a very annoying feature intended for debugging."
+        )
+        self._checkboxes['disable_tooltips'].setToolTip(
+            "No matter what never show tooltips."
+        )
+        self._checkboxes['no_bury'].setToolTip(
+            "Never bury cards.\n"
+            "Though this option disables the main feature of the add-on,\n"
+            "you can still use it if you want to tag or flag difficult cards,\n"
+            "but keep them in the learning queue."
+        )
+        self._checkboxes['ignore_new_cards'].setToolTip(
+            "Don't do anything to cards in the learning queue.\n"
+            "If enabled, the add-on is going to act only on cards that have graduated before."
+        )
+        self._tag_edit.setToolTip(
+            "This tag is attached to cards when they get buried by Mortician.\n"
+            "You can use the tag to find the cards in the Anki Browser later."
+        )
+        self._flag_edit.setToolTip(
+            "Similar to \"tag\" but adds a flag to the difficult cards.\n"
+            "You can filter cards by flag in the Anki Browser."
+        )
 
 
 def on_open_settings():
