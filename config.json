@@ -7,5 +7,6 @@
   "flag": "",
   "disable_tooltips": false,
   "no_bury": false,
-  "ignore_new_cards": false
+  "ignore_new_cards": false,
+  "tooltip_duration": 7
 }

@@ -37,7 +37,7 @@ from .timeframe import TimeFrame
 def notify(msg: str):
     print(msg)
     if config['disable_tooltips'] is False:
-        tooltip(msg, period=7000)  # TODO: move to config
+        tooltip(msg, period=TimeFrame(seconds=config.get('tooltip_duration')).milliseconds())
 
 
 def current_time() -> TimeFrame:
