@@ -4,7 +4,7 @@ from aqt import mw
 from aqt.qt import *
 
 from .color import Color
-from .config import config
+from .config import config, write_config
 
 WINDOW_TITLE = "Mortician Options"
 
@@ -115,7 +115,7 @@ class SettingsDialog(QDialog):
             config[key] = int(widget.text())
         config['tag'] = self._tag_edit.text()
         config['flag'] = self._flag_edit.currentText()
-        mw.addonManager.writeConfig(__name__, config)
+        write_config()
         self.accept()
 
     def add_tooltips(self):

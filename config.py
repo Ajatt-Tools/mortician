@@ -1,3 +1,5 @@
+import functools
+
 from aqt import mw
 
 
@@ -18,3 +20,4 @@ def init_config():
 
 
 config = init_config()
+write_config = functools.partial(mw.addonManager.writeConfig, module=__name__, conf=config)
