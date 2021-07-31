@@ -72,7 +72,7 @@ def agains_in_the_timeframe(card_id: int) -> int:
 def bury_card(card_id: int) -> None:
     mw.checkpoint(_("Bury difficult card"))
     mw.col.sched.buryCards([card_id], manual=False)
-    mw.col.sched._resetLrn()
+    mw.col.sched.reset()
 
 
 def decide_tag(note: Note) -> None:
