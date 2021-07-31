@@ -164,7 +164,7 @@ def on_open_settings():
     dialog.exec_()
 
 
-def setup_settings_action():
+def setup_settings_action() -> QAction:
     action_settings = QAction(WINDOW_TITLE + '...', mw)
     qconnect(action_settings.triggered, on_open_settings)
     return action_settings
