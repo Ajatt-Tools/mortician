@@ -170,4 +170,5 @@ def setup_settings_action() -> QAction:
     return action_settings
 
 
-mw.form.menuTools.addAction(setup_settings_action())
+def init():
+    mw.form.menuTools.addAction(setup_settings_action())

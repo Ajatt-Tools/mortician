@@ -2,9 +2,10 @@ import time
 from typing import Literal
 
 from anki.cards import Card, CardId
-from anki.notes import Note
+from anki.collection import Collection
 from aqt import gui_hooks
 from aqt import mw
+from aqt.operations import CollectionOp, ResultWithChanges
 from aqt.reviewer import Reviewer
 from aqt.utils import tooltip
 
@@ -37,11 +38,14 @@ class TimeFrame:
     def milliseconds(self) -> int:
         return int(self._milliseconds)
 
+    def hours(self) -> int:
+        return int(self.milliseconds_to_hours(self._milliseconds))
+
 
 def notify(msg: str):
     print(msg)
     if config['disable_tooltips'] is False:
-        tooltip(msg)
+        tooltip(msg, period=7000)  # TODO: move to config
 
 
 def current_time() -> TimeFrame:
@@ -84,27 +88,46 @@ def agains_in_the_timeframe(card_id: CardId) -> int:
     )
 
 
-def bury_card(card_id: CardId) -> None:
-    mw.checkpoint("Bury difficult card")
-    mw.col.sched.bury_cards([card_id, ], manual=False)
-    mw.col.sched.reset()
+def act_on_card(col: Collection, card: Card) -> ResultWithChanges:
+    pos = col.add_custom_undo_entry("Mortician: modify difficult card")
+
+    if config['tag'] and not (note := card.note()).has_tag(config['tag']):
+        note.add_tag(config['tag'])
+        col.update_note(note)
+
+    if config['flag'] and (color_code := Color.num_of(config['flag'].capitalize())) != Color.No.value:
+        card.set_user_flag(color_code)
+        col.update_card(card)
+
+    if config['no_bury'] is False:
+        mw.col.sched.bury_cards([card.id, ], manual=False)
+
+    return col.merge_undo_entries(pos)
 
 
-def decide_tag(note: Note) -> None:
-    if config['tag'] and not note.hasTag(config['tag']):
-        note.addTag(config['tag'])
-        note.flush()
-
-
-def decide_flag(card: Card) -> None:
+def construct_msg():
+    actions = []
+    if not config['no_bury']:
+        actions.append('buried')
+    if config['tag']:
+        actions.append('tagged')
     if config['flag']:
-        color_code = Color.num_of(config['flag'].capitalize())
-        if color_code != Color.No.value:
-            card.setUserFlag(color_code)
-            card.flush()
+        actions.append('flagged')
+
+    msg = f"Card has been {actions[0]}"
+    if len(actions) == 2:
+        msg += f" and {actions[1]}"
+    elif len(actions) > 2:
+        i = 1
+        while i < len(actions) - 1:
+            msg += f", {actions[i]}"
+            i = i + 1
+        msg += f" and {actions[-1]}"
+
+    return msg
 
 
-def on_did_answer_card(_: Reviewer, card: Card, ease: Literal[1, 2, 3, 4]) -> None:
+def on_did_answer_card(reviewer: Reviewer, card: Card, ease: Literal[1, 2, 3, 4]) -> None:
     """Bury card if it was answered 'again' too many times within the specified time."""
 
     # only care about failed cards
@@ -115,18 +138,20 @@ def on_did_answer_card(_: Reviewer, card: Card, ease: Literal[1, 2, 3, 4]) -> No
         return
 
     agains = agains_in_the_timeframe(card.id)
-    passed = time_passed()
-
-    info = f"Card {card.id} was answered again {agains} times in the past {passed} hours."
+    passed = time_passed().hours()
 
     if agains >= config['again_threshold']:
-        decide_tag(card.note())
-        decide_flag(card)
-        if config['no_bury'] is False:
-            bury_card(card.id)
-            notify(f"Card buried because it was answered again {agains} times in the past {passed} hours.")
+        if any((config['tag'], config['flag'], not config['no_bury'])):
+            msg = construct_msg() + f' because it was answered "again" {agains} times in the past {passed} hours.'
+            CollectionOp(
+                parent=reviewer.web, op=lambda col: act_on_card(col, card)
+            ).success(
+                lambda out: notify(msg) if out else None
+            ).run_in_background()
     elif config['again_notify'] is True:
+        info = f"Card {card.id} was answered again {agains} times in the past {passed} hours."
         notify(info)
 
 
-gui_hooks.reviewer_did_answer_card.append(on_did_answer_card)
+def init():
+    gui_hooks.reviewer_did_answer_card.append(on_did_answer_card)
