@@ -22,11 +22,9 @@ import time
 from typing import Literal
 
 from anki.cards import Card
-from anki.cards import CardId
 from anki.collection import Collection
 from aqt import gui_hooks
 from aqt import mw
-from aqt.operations import CollectionOp, ResultWithChanges
 from aqt.reviewer import Reviewer
 from aqt.utils import tooltip
 
@@ -73,7 +71,7 @@ def time_passed() -> TimeFrame:
         return TimeFrame(hours=config['timeframe'])
 
 
-def agains_in_the_timeframe(card_id: CardId) -> int:
+def agains_in_the_timeframe(card_id: int) -> int:
     # id: epoch-milliseconds timestamp of when you did the review
     # ease: which button you pushed to score your recall. ('again' == 1)
     return mw.col.db.scalar(
@@ -83,21 +81,20 @@ def agains_in_the_timeframe(card_id: CardId) -> int:
     )
 
 
-def act_on_card(col: Collection, card: Card) -> ResultWithChanges:
-    pos = col.add_custom_undo_entry("Mortician: modify difficult card")
+def act_on_card(col: Collection, card: Card) -> None:
+    mw.checkpoint("Mortician: modify difficult card")
 
     if config['tag'] and not (note := card.note()).has_tag(config['tag']):
-        note.add_tag(config['tag'])
-        col.update_note(note)
+        note.addTag(config['tag'])
+        note.flush()
 
     if config['flag'] and (color_code := Color.num_of(config['flag'].capitalize())) != Color.No.value:
-        card.set_user_flag(color_code)
-        col.update_card(card)
+        card.setUserFlag(color_code)
+        card.flush()
 
     if config['no_bury'] is False:
-        mw.col.sched.bury_cards([card.id, ], manual=False)
-
-    return col.merge_undo_entries(pos)
+        col.sched.bury_cards([card.id, ], manual=False)
+        col.sched.reset()
 
 
 def threshold(card: Card) -> int:
@@ -123,11 +120,8 @@ def on_did_answer_card(reviewer: Reviewer, card: Card, ease: Literal[1, 2, 3, 4]
 
     if agains >= threshold(card):
         if any((config['tag'], config['flag'], not config['no_bury'])):
-            CollectionOp(
-                parent=reviewer.web, op=lambda col: act_on_card(col, card)
-            ).success(
-                lambda out: notify(action_msg(agains, passed)) if out else None
-            ).run_in_background()
+            act_on_card(reviewer.mw.col, card)
+            notify(action_msg(agains, passed))
     elif config['again_notify'] is True:
         notify(info_msg(card, agains, passed))
 
