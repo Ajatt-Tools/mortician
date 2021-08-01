@@ -71,7 +71,7 @@ def on_did_answer_card(reviewer: Reviewer, card: Card, ease: Literal[1, 2, 3, 4]
     if ease != 1:
         return
 
-    if config['ignore_new_cards'] is True and card.type < 2:
+    if config['ignore_new_cards'] is True and card.type <= TYPE_LEARNING:
         return
 
     agains = agains_in_the_timeframe(card.id)
