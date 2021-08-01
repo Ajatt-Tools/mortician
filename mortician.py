@@ -1,7 +1,7 @@
 import time
 
 from anki.cards import Card
-from anki.lang import _
+from gettext import gettext as _
 from anki.notes import Note
 from aqt import gui_hooks
 from aqt import mw
