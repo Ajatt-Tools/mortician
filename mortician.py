@@ -21,7 +21,8 @@
 import time
 from typing import Literal
 
-from anki.cards import Card, CardId
+from anki.cards import Card
+from anki.cards import CardId
 from anki.collection import Collection
 from aqt import gui_hooks
 from aqt import mw
@@ -101,10 +102,10 @@ def act_on_card(col: Collection, card: Card) -> ResultWithChanges:
 
 def threshold(card: Card) -> int:
     """Returns again threshold for the card, depending on its queue type."""
-    if card.type == TYPE_LEARNING:
-        return config.get('new_again_threshold')
-    elif card.type == TYPE_RELEARNING:
-        return config.get('again_threshold')
+    if not card.type or card.type <= TYPE_LEARNING:
+        return config.get('new_again_threshold', DEFAULT_THRESHOLD)
+    else:
+        return config.get('again_threshold', DEFAULT_THRESHOLD)
 
 
 def on_did_answer_card(reviewer: Reviewer, card: Card, ease: Literal[1, 2, 3, 4]) -> None:

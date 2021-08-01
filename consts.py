@@ -9,3 +9,5 @@ INTEGER_OPTIONS = {
     'timeframe': 'hours',
     'tooltip_duration': 'seconds',
 }
+
+DEFAULT_THRESHOLD = 5
