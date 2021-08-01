@@ -7,6 +7,11 @@ from .color import Color
 from .config import config
 
 WINDOW_TITLE = "Mortician Options"
+INTEGER_OPTIONS = {
+    'again_threshold': 'times',
+    'new_again_threshold': 'times',
+    'timeframe': 'hours',
+}
 
 
 def get_toggleables() -> Dict[str, bool]:
@@ -33,12 +38,12 @@ def make_flag_edit_widget() -> QComboBox:
     return flag_edit
 
 
-def make_limits_widgets() -> Dict[str, QLineEdit]:
+def make_limits_widgets() -> Dict[str, QSpinBox]:
     widgets = {}
-    for key in ('again_threshold', 'timeframe'):
-        widgets[key] = QLineEdit()
-        widgets[key].setValidator(QIntValidator())
-        widgets[key].setText(str(config[key]))
+    for key in INTEGER_OPTIONS.keys():
+        widgets[key] = QSpinBox()
+        widgets[key].setRange(1, 150)
+        widgets[key].setValue(int(config[key]))
     return widgets
 
 
@@ -46,6 +51,7 @@ class SettingsDialog(QDialog):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setWindowTitle(WINDOW_TITLE)
+        self.setMinimumSize(320, 240)
         self._checkboxes = make_checkboxes()
         self._tag_edit = QLineEdit(config['tag'])
         self._flag_edit = make_flag_edit_widget()
@@ -88,7 +94,7 @@ class SettingsDialog(QDialog):
         lines = zip(
             (QLabel(key_to_label(key)) for key in self._limits.keys()),
             self._limits.values(),
-            (QLabel(unit) for unit in ('times', 'hours')),
+            (QLabel(unit) for unit in INTEGER_OPTIONS.values()),
         )
 
         for y, line in enumerate(lines):
@@ -112,7 +118,7 @@ class SettingsDialog(QDialog):
         for key, widget in self._checkboxes.items():
             config[key] = widget.isChecked()
         for key, widget in self._limits.items():
-            config[key] = int(widget.text())
+            config[key] = int(widget.value())
         config['tag'] = self._tag_edit.text()
         config['flag'] = self._flag_edit.currentText()
         mw.addonManager.writeConfig(__name__, config)
@@ -120,7 +126,13 @@ class SettingsDialog(QDialog):
 
     def add_tooltips(self):
         self._limits['again_threshold'].setToolTip(
-            "How many times a card should be failed until it gets buried."
+            "How many times a card should be failed until it gets buried.\n"
+            "This setting applies to cards in the relearning queue,\n"
+            "i.e. the cards that graduated at least once before."
+        )
+        self._limits['new_again_threshold'].setToolTip(
+            "How many times a card should be failed until it gets buried.\n"
+            "This setting applies to new cards."
         )
         self._limits['timeframe'].setToolTip(
             "From how many hours ago count the answers.\n"
