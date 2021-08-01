@@ -4,14 +4,9 @@ from aqt import mw
 from aqt.qt import *
 
 from .color import Color
-from .config import config, write_config
-
-WINDOW_TITLE = "Mortician Options"
-INTEGER_OPTIONS = {
-    'again_threshold': 'times',
-    'timeframe': 'hours',
-    'tooltip_duration': 'seconds'
-}
+from .config import config
+from .config import write_config
+from .consts import *
 
 
 def get_toggleables() -> Dict[str, bool]:
@@ -51,7 +46,7 @@ def make_limits_widgets() -> Dict[str, QSpinBox]:
 class SettingsDialog(QDialog):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.setWindowTitle(WINDOW_TITLE)
+        self.setWindowTitle(OPTS_WINDOW_TITLE)
         self.setMinimumSize(320, 240)
         self._checkboxes = make_checkboxes()
         self._tag_edit = QLineEdit(config['tag'])
@@ -127,7 +122,13 @@ class SettingsDialog(QDialog):
 
     def add_tooltips(self):
         self._limits['again_threshold'].setToolTip(
-            "How many times a card should be failed until it gets buried."
+            "How many times a card should be failed until it gets buried.\n"
+            "This setting applies to cards in the relearning queue,\n"
+            "i.e. the cards that graduated at least once before."
+        )
+        self._limits['new_again_threshold'].setToolTip(
+            "How many times a card should be failed until it gets buried.\n"
+            "This setting applies to new cards."
         )
         self._limits['timeframe'].setToolTip(
             "From how many hours ago count the answers.\n"
@@ -175,7 +176,7 @@ def on_open_settings():
 
 
 def setup_settings_action() -> QAction:
-    action_settings = QAction(WINDOW_TITLE + '...', mw)
+    action_settings = QAction(OPTS_WINDOW_TITLE + '...', mw)
     qconnect(action_settings.triggered, on_open_settings)
     return action_settings
 

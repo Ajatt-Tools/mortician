@@ -1,2 +1,4 @@
 #!/usr/bin/env sh
-zip -r mortician ./*.py ./config.*
+
+cd -- "$(git rev-parse --show-toplevel)" &&
+	git archive HEAD --format=zip -o "mortician_$(git branch --show-current).ankiaddon"

@@ -31,6 +31,7 @@ from aqt.utils import tooltip
 
 from .color import Color
 from .config import config
+from .consts import *
 from .timeframe import TimeFrame
 
 
@@ -119,6 +120,14 @@ def construct_msg():
     return msg
 
 
+def threshold(card: Card) -> int:
+    """Returns again threshold for the card, depending on its queue type."""
+    if card.type == TYPE_LEARNING:
+        return config.get('new_again_threshold')
+    elif card.type == TYPE_RELEARNING:
+        return config.get('again_threshold')
+
+
 def on_did_answer_card(reviewer: Reviewer, card: Card, ease: Literal[1, 2, 3, 4]) -> None:
     """Bury card if it was answered 'again' too many times within the specified time."""
 
@@ -132,7 +141,7 @@ def on_did_answer_card(reviewer: Reviewer, card: Card, ease: Literal[1, 2, 3, 4]
     agains = agains_in_the_timeframe(card.id)
     passed = time_passed().hours()
 
-    if agains >= config['again_threshold']:
+    if agains >= threshold(card):
         if any((config['tag'], config['flag'], not config['no_bury'])):
             msg = construct_msg() + f' because it was answered "again" {agains} times in the past {passed} hours.'
             CollectionOp(
