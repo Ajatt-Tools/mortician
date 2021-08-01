@@ -32,6 +32,7 @@ from aqt.utils import tooltip
 from .color import Color
 from .config import config
 from .consts import *
+from .messages import action_msg, info_msg
 from .timeframe import TimeFrame
 
 
@@ -98,28 +99,6 @@ def act_on_card(col: Collection, card: Card) -> ResultWithChanges:
     return col.merge_undo_entries(pos)
 
 
-def construct_msg():
-    actions = []
-    if not config['no_bury']:
-        actions.append('buried')
-    if config['tag']:
-        actions.append('tagged')
-    if config['flag']:
-        actions.append('flagged')
-
-    msg = f"Card has been {actions[0]}"
-    if len(actions) == 2:
-        msg += f" and {actions[1]}"
-    elif len(actions) > 2:
-        i = 1
-        while i < len(actions) - 1:
-            msg += f", {actions[i]}"
-            i = i + 1
-        msg += f" and {actions[-1]}"
-
-    return msg
-
-
 def threshold(card: Card) -> int:
     """Returns again threshold for the card, depending on its queue type."""
     if card.type == TYPE_LEARNING:
@@ -143,15 +122,13 @@ def on_did_answer_card(reviewer: Reviewer, card: Card, ease: Literal[1, 2, 3, 4]
 
     if agains >= threshold(card):
         if any((config['tag'], config['flag'], not config['no_bury'])):
-            msg = construct_msg() + f' because it was answered "again" {agains} times in the past {passed} hours.'
             CollectionOp(
                 parent=reviewer.web, op=lambda col: act_on_card(col, card)
             ).success(
-                lambda out: notify(msg) if out else None
+                lambda out: notify(action_msg(agains, passed)) if out else None
             ).run_in_background()
     elif config['again_notify'] is True:
-        info = f"Card {card.id} was answered again {agains} times in the past {passed} hours."
-        notify(info)
+        notify(info_msg(card, agains, passed))
 
 
 def init():
