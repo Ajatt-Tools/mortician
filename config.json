@@ -1,5 +1,6 @@
 {
-  "again_threshold": 5,
+  "again_threshold": 3,
+  "new_again_threshold": 5,
   "timeframe": 24,
   "count_from_daystart": false,
   "again_notify": false,

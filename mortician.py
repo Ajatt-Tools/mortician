@@ -10,6 +10,10 @@ from aqt.utils import tooltip
 from .color import Color
 from .config import config
 
+# https://github.com/ankidroid/Anki-Android/wiki/Database-Structure#database-schema
+TYPE_LEARNING = 1
+TYPE_RELEARNING = 3
+
 
 def notify(msg: str):
     print(msg)
@@ -89,6 +93,14 @@ def decide_flag(card: Card) -> None:
             card.flush()
 
 
+def threshold(card: Card) -> int:
+    """Returns again threshold for the card, depending on its queue type."""
+    if card.type == TYPE_LEARNING:
+        return config.get('new_again_threshold')
+    elif card.type == TYPE_RELEARNING:
+        return config.get('again_threshold')
+
+
 def on_did_answer_card(_, card: Card, ease: int) -> None:
     """Bury card if it was answered 'again' too many times within the specified time."""
 
@@ -104,7 +116,7 @@ def on_did_answer_card(_, card: Card, ease: int) -> None:
 
     info = f"Card {card.id} was answered again {agains} times in the past {time_passed} hours."
 
-    if agains >= config['again_threshold']:
+    if agains >= threshold(card):
         decide_tag(card.note())
         decide_flag(card)
         if config['no_bury'] is False:
