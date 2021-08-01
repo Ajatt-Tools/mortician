@@ -9,10 +9,7 @@ from aqt.utils import tooltip
 
 from .color import Color
 from .config import config
-
-# https://github.com/ankidroid/Anki-Android/wiki/Database-Structure#database-schema
-TYPE_LEARNING = 1
-TYPE_RELEARNING = 3
+from .consts import *
 
 
 def notify(msg: str):

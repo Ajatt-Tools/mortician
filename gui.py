@@ -5,13 +5,7 @@ from aqt.qt import *
 
 from .color import Color
 from .config import config
-
-WINDOW_TITLE = "Mortician Options"
-INTEGER_OPTIONS = {
-    'again_threshold': 'times',
-    'new_again_threshold': 'times',
-    'timeframe': 'hours',
-}
+from .consts import *
 
 
 def get_toggleables() -> Dict[str, bool]:
@@ -50,7 +44,7 @@ def make_limits_widgets() -> Dict[str, QSpinBox]:
 class SettingsDialog(QDialog):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.setWindowTitle(WINDOW_TITLE)
+        self.setWindowTitle(OPTS_WINDOW_TITLE)
         self.setMinimumSize(320, 240)
         self._checkboxes = make_checkboxes()
         self._tag_edit = QLineEdit(config['tag'])
@@ -177,7 +171,7 @@ def on_open_settings():
 
 
 def setup_settings_action() -> QAction:
-    action_settings = QAction(WINDOW_TITLE + '...', mw)
+    action_settings = QAction(OPTS_WINDOW_TITLE + '...', mw)
     qconnect(action_settings.triggered, on_open_settings)
     return action_settings
 
