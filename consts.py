@@ -8,3 +8,5 @@ INTEGER_OPTIONS = {
     'new_again_threshold': 'times',
     'timeframe': 'hours',
 }
+
+DEFAULT_THRESHOLD = 5

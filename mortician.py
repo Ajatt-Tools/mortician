@@ -92,12 +92,10 @@ def decide_flag(card: Card) -> None:
 
 def threshold(card: Card) -> int:
     """Returns again threshold for the card, depending on its queue type."""
-    if card.type is None or card.type <= TYPE_LEARNING:
-        return config.get('new_again_threshold')
-    elif card.type > TYPE_LEARNING:
-        return config.get('again_threshold')
+    if not card.type or card.type <= TYPE_LEARNING:
+        return config.get('new_again_threshold', DEFAULT_THRESHOLD)
     else:
-        raise ValueError(f"Unknown card type: {card.type}.")
+        return config.get('again_threshold', DEFAULT_THRESHOLD)
 
 
 def on_did_answer_card(_, card: Card, ease: int) -> None:
