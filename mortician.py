@@ -52,7 +52,7 @@ def act_on_card(col: Collection, card: Card) -> None:
         card.flush()
 
     if config['no_bury'] is False:
-        col.sched.bury_cards([card.id, ], manual=False)
+        col.sched.buryCards([card.id, ], manual=False)
         col.sched.reset()
 
 
