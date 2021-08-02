@@ -20,4 +20,5 @@ def init_config():
 
 
 config = init_config()
-write_config = functools.partial(mw.addonManager.writeConfig, module=__name__, conf=config)
+write_config = functools.partial(mw.addonManager.writeConfig, __name__, config)
+set_config_action = functools.partial(mw.addonManager.setConfigAction, __name__)

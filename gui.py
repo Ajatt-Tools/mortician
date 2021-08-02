@@ -4,8 +4,7 @@ from aqt import mw
 from aqt.qt import *
 
 from .color import Color
-from .config import config
-from .config import write_config
+from .config import config, set_config_action, write_config
 from .consts import *
 
 
@@ -183,3 +182,4 @@ def setup_settings_action() -> QAction:
 
 def init():
     mw.form.menuTools.addAction(setup_settings_action())
+    set_config_action(on_open_settings)
