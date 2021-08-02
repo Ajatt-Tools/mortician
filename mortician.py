@@ -48,7 +48,7 @@ def act_on_card(col: Collection, card: Card) -> ResultWithChanges:
         col.update_note(note)
 
     if config['flag'] and (color_code := Color.num_of(config['flag'].capitalize())) != Color.No.value:
-        card.set_user_flag(color_code)
+        col.set_user_flag_for_cards(color_code, cids=[card.id, ])
         col.update_card(card)
 
     if config['no_bury'] is False:
