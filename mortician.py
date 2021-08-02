@@ -43,7 +43,7 @@ def notify(msg: str):
 def act_on_card(col: Collection, card: Card) -> None:
     mw.checkpoint("Mortician: modify difficult card")
 
-    if config['tag'] and not (note := card.note()).has_tag(config['tag']):
+    if config['tag'] and not (note := card.note()).hasTag(config['tag']):
         note.addTag(config['tag'])
         note.flush()
 
