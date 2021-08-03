@@ -40,6 +40,11 @@ def notify(msg: str):
         tooltip(msg, period=TimeFrame(seconds=config.get('tooltip_duration')).milliseconds())
 
 
+def sched_reset(col: Collection) -> None:
+    if func := getattr(col.sched, '_resetLrn', None):
+        func()
+
+
 def act_on_card(col: Collection, card: Card) -> ResultWithChanges:
     pos = col.add_custom_undo_entry("Mortician: modify difficult card")
 
@@ -53,7 +58,7 @@ def act_on_card(col: Collection, card: Card) -> ResultWithChanges:
 
     if config['no_bury'] is False:
         col.sched.bury_cards([card.id, ], manual=False)
-        col.sched.reset()
+        sched_reset(col)
 
     return col.merge_undo_entries(pos)
 
