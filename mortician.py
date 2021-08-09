@@ -41,6 +41,7 @@ def notify(msg: str):
 
 
 def sched_reset(col: Collection) -> None:
+    # V2 and V1 have _resetLrn(). On V3 it's not needed.
     if func := getattr(col.sched, '_resetLrn', None):
         func()
 
