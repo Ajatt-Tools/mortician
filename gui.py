@@ -3,6 +3,7 @@ from typing import Dict
 from aqt import mw
 from aqt.qt import *
 
+from .ajt_common import menu_root_entry
 from .color import Color
 from .config import config, set_config_action, write_config
 from .consts import *
@@ -174,12 +175,13 @@ def on_open_settings():
     dialog.exec_()
 
 
-def setup_settings_action() -> QAction:
-    action_settings = QAction(OPTS_WINDOW_TITLE + '...', mw)
+def setup_settings_action(parent: QWidget) -> QAction:
+    action_settings = QAction(OPTS_WINDOW_TITLE + '...', parent)
     qconnect(action_settings.triggered, on_open_settings)
     return action_settings
 
 
 def init():
-    mw.form.menuTools.addAction(setup_settings_action())
+    root_menu = menu_root_entry()
+    root_menu.addAction(setup_settings_action(root_menu))
     set_config_action(on_open_settings)
