@@ -40,6 +40,12 @@ def notify(msg: str):
         tooltip(msg, period=TimeFrame(seconds=config.get('tooltip_duration')).milliseconds())
 
 
+def sched_reset(col: Collection) -> None:
+    # V2 and V1 have _resetLrn(). On V3 it's not needed.
+    if func := getattr(col.sched, '_resetLrn', None):
+        func()
+
+
 def act_on_card(col: Collection, card: Card) -> None:
     mw.checkpoint("Mortician: modify difficult card")
 
@@ -53,7 +59,7 @@ def act_on_card(col: Collection, card: Card) -> None:
 
     if config['no_bury'] is False:
         col.sched.buryCards([card.id, ], manual=False)
-        col.sched.reset()
+        sched_reset(col)
 
 
 def threshold(card: Card) -> int:
