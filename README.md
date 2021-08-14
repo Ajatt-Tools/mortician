@@ -31,7 +31,7 @@ git clone 'https://github.com/Ajatt-Tools/mortician.git' ~/.local/share/Anki2/ad
 
 ## Configuration
 
-To configure the add-on select `Tools` > `Mortician Options...`.
+To configure the add-on select `AJT` > `Mortician Options...`.
 
 ![options](https://user-images.githubusercontent.com/69171671/120606253-81d26d80-c43e-11eb-8111-32bfa24d9db2.png)
 
