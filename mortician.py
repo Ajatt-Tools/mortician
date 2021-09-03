@@ -27,8 +27,7 @@ from aqt.operations import CollectionOp, ResultWithChanges
 from aqt.reviewer import Reviewer
 from aqt.utils import tooltip
 
-from .color import Color
-from .config import config
+from .config import config, get_flag_code
 from .consts import *
 from .messages import action_msg, info_msg
 from .timeframe import TimeFrame, agains_in_the_timeframe, time_passed
@@ -53,7 +52,7 @@ def act_on_card(col: Collection, card: Card) -> ResultWithChanges:
         note.add_tag(config['tag'])
         col.update_note(note)
 
-    if config['flag'] and (color_code := Color.num_of(config['flag'].capitalize())) != Color.No.value:
+    if color_code := get_flag_code():
         col.set_user_flag_for_cards(color_code, cids=[card.id, ])
         col.update_card(card)
 

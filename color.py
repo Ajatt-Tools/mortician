@@ -11,6 +11,7 @@ class Color(Enum):
 
     @classmethod
     def num_of(cls, color: str) -> int:
+        color = color.capitalize()
         for item in cls:
             if item.name == color:
                 return item.value

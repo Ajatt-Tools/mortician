@@ -20,16 +20,16 @@
 
 from typing import List
 
-from .config import config
+from .config import config, get_flag_code
 
 
 def get_actions() -> List[str]:
     actions = []
-    if not config['no_bury']:
+    if config['no_bury'] is False:
         actions.append('buried')
     if config['tag']:
         actions.append('tagged')
-    if config['flag']:
+    if get_flag_code():
         actions.append('flagged')
     return actions
 

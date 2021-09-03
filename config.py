@@ -1,6 +1,8 @@
-import functools
+from typing import Optional, Callable
 
 from aqt import mw
+
+from .color import Color
 
 
 def init_config():
@@ -20,5 +22,18 @@ def init_config():
 
 
 config = init_config()
-write_config = functools.partial(mw.addonManager.writeConfig, __name__, config)
-set_config_action = functools.partial(mw.addonManager.setConfigAction, __name__)
+
+
+def write_config():
+    return mw.addonManager.writeConfig(__name__, config)
+
+
+def set_config_action(fn: Callable):
+    return mw.addonManager.setConfigAction(__name__, fn)
+
+
+def get_flag_code() -> Optional[int]:
+    if config['flag'] and (color_code := Color.num_of(config['flag'])) != Color.No.value:
+        return color_code
+    else:
+        return None
