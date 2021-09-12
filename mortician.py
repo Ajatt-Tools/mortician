@@ -52,9 +52,8 @@ def act_on_card(col: Collection, card: Card) -> ResultWithChanges:
         note.add_tag(config['tag'])
         col.update_note(note)
 
-    if color_code := get_flag_code():
+    if (color_code := get_flag_code()) and card.user_flag() != color_code:
         col.set_user_flag_for_cards(color_code, cids=[card.id, ])
-        col.update_card(card)
 
     if config['no_bury'] is False:
         col.sched.bury_cards([card.id, ], manual=False)
