@@ -2,7 +2,7 @@ from typing import Optional, Callable
 
 from aqt import mw
 
-from .color import Color
+from .enums import Color
 
 
 def init_config():
@@ -33,7 +33,7 @@ def set_config_action(fn: Callable):
 
 
 def get_flag_code() -> Optional[int]:
-    if config['flag'] and (color_code := Color.num_of(config['flag'])) != Color.No.value:
+    if config['flag'] and (color_code := Color.value_of(config['flag'])) != Color.No.value:
         return color_code
     else:
         return None

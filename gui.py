@@ -4,9 +4,9 @@ from aqt import mw
 from aqt.qt import *
 
 from .ajt_common import menu_root_entry
-from .color import Color
 from .config import config, set_config_action, write_config
 from .consts import *
+from .enums import Color, Action
 
 
 def get_toggleables() -> Dict[str, bool]:
@@ -28,9 +28,22 @@ def make_checkboxes() -> Dict[str, QCheckBox]:
 
 def make_flag_edit_widget() -> QComboBox:
     flag_edit = QComboBox()
-    flag_edit.addItems(Color.colors())
-    flag_edit.setCurrentIndex(Color.num_of(config['flag']))
+    flag_edit.addItems(Color.names())
+    flag_edit.setCurrentIndex(Color.value_of(config['flag']))
     return flag_edit
+
+
+def make_action_edit_widget() -> QComboBox:
+    action_edit = QComboBox()
+    action_edit.addItems(Action.names())
+    action_edit.setCurrentText(Action.valid_name(config['action']))
+    return action_edit
+
+
+def make_tag_edit_widget() -> QLineEdit:
+    widget = QLineEdit(config['tag'])
+    widget.currentText = widget.text
+    return widget
 
 
 def make_limits_widgets() -> Dict[str, QSpinBox]:
@@ -50,7 +63,8 @@ class SettingsDialog(QDialog):
         self.setMinimumSize(320, 240)
         self._checkboxes = make_checkboxes()
         self._edits = {
-            'tag': QLineEdit(config['tag']),
+            'action': make_action_edit_widget(),
+            'tag': make_tag_edit_widget(),
             'flag': make_flag_edit_widget(),
         }
         self._limits = make_limits_widgets()
@@ -110,8 +124,8 @@ class SettingsDialog(QDialog):
             config[key] = widget.isChecked()
         for key, widget in self._limits.items():
             config[key] = int(widget.value())
-        config['tag'] = self._edits['tag'].text()
-        config['flag'] = self._edits['flag'].currentText()
+        for key, widget in self._edits.items():
+            config[key] = widget.currentText()
         write_config()
         self.accept()
 
