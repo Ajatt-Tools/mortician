@@ -49,8 +49,10 @@ class SettingsDialog(QDialog):
         self.setWindowTitle(OPTS_WINDOW_TITLE)
         self.setMinimumSize(320, 240)
         self._checkboxes = make_checkboxes()
-        self._tag_edit = QLineEdit(config['tag'])
-        self._flag_edit = make_flag_edit_widget()
+        self._edits = {
+            'tag': QLineEdit(config['tag']),
+            'flag': make_flag_edit_widget(),
+        }
         self._limits = make_limits_widgets()
         self.ok_button = QPushButton("Ok")
         self.cancel_button = QPushButton("Cancel")
@@ -60,8 +62,8 @@ class SettingsDialog(QDialog):
 
     def setup_layout(self) -> QLayout:
         layout = QVBoxLayout(self)
+        layout.addLayout(self.make_edits_layout())
         layout.addLayout(self.make_checkboxes_layout())
-        layout.addLayout(self.make_marking_layout())
         layout.addLayout(self.make_limits_layout())
         layout.addLayout(self.make_bottom_buttons())
         return layout
@@ -72,17 +74,10 @@ class SettingsDialog(QDialog):
             layout.addWidget(widget)
         return layout
 
-    def make_marking_layout(self) -> QGridLayout:
-        layout = QGridLayout()
-        lines = (
-            (QLabel('Tag'), self._tag_edit),
-            (QLabel('Flag'), self._flag_edit)
-        )
-
-        for y, line in enumerate(lines):
-            for x, widget in enumerate(line):
-                layout.addWidget(widget, y, x)
-
+    def make_edits_layout(self) -> QGridLayout:
+        layout = QFormLayout()
+        for label, widget in self._edits.items():
+            layout.addRow(label.capitalize(), widget)
         return layout
 
     def make_limits_layout(self) -> QGridLayout:
@@ -115,8 +110,8 @@ class SettingsDialog(QDialog):
             config[key] = widget.isChecked()
         for key, widget in self._limits.items():
             config[key] = int(widget.value())
-        config['tag'] = self._tag_edit.text()
-        config['flag'] = self._flag_edit.currentText()
+        config['tag'] = self._edits['tag'].text()
+        config['flag'] = self._edits['flag'].currentText()
         write_config()
         self.accept()
 
@@ -160,11 +155,11 @@ class SettingsDialog(QDialog):
             "Don't do anything to cards in the learning queue.\n"
             "If enabled, the add-on is going to act only on cards that have graduated before."
         )
-        self._tag_edit.setToolTip(
+        self._edits['tag'].setToolTip(
             "This tag is attached to cards when they get buried by Mortician.\n"
             "You can use the tag to find the cards in the Anki Browser later."
         )
-        self._flag_edit.setToolTip(
+        self._edits['flag'].setToolTip(
             "Similar to \"tag\" but adds a flag to the difficult cards.\n"
             "You can filter cards by flag in the Anki Browser."
         )
