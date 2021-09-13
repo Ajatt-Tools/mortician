@@ -27,6 +27,7 @@ from aqt.operations import CollectionOp, ResultWithChanges
 from aqt.reviewer import Reviewer
 from aqt.utils import tooltip
 
+from .enums import Action
 from .config import config, get_flag_code
 from .consts import *
 from .messages import action_msg, info_msg
@@ -55,8 +56,11 @@ def act_on_card(col: Collection, card: Card) -> ResultWithChanges:
     if (color_code := get_flag_code()) and card.user_flag() != color_code:
         col.set_user_flag_for_cards(color_code, cids=[card.id, ])
 
-    if config['no_bury'] is False:
-        col.sched.bury_cards([card.id, ], manual=False)
+    if config['action'] == Action.Bury.name:
+        col.sched.bury_cards(ids=[card.id, ], manual=False)
+        sched_reset(col)
+    elif config['action'] == Action.Suspend.name:
+        col.sched.suspend_cards(ids=[card.id, ])
         sched_reset(col)
 
     return col.merge_undo_entries(pos)
@@ -84,7 +88,7 @@ def on_did_answer_card(reviewer: Reviewer, card: Card, ease: Literal[1, 2, 3, 4]
     passed = time_passed().hours()
 
     if agains >= threshold(card):
-        if any((config['tag'], config['flag'], not config['no_bury'])):
+        if any((config['tag'], config['flag'], config['action'] != Action.No.name)):
             CollectionOp(
                 parent=reviewer.web, op=lambda col: act_on_card(col, card)
             ).success(

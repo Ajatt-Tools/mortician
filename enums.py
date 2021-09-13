@@ -42,12 +42,13 @@ class Action(ConfigEnum):
 
 
 def main():
-    print(Color.value_of('invalid'))
-    print(Color.value_of('Red'))
-    print('Red' in Color.names())
-    print('Magenta' in Color.names())
-    print(Action.value_of('invalid'))
-    print(Action.value_of('Bury'))
+    print("Color.value_of('invalid')", Color.value_of('invalid'))
+    print("Color.value_of('Red')", Color.value_of('Red'))
+    print("'Red' in Color.names()", 'Red' in Color.names())
+    print("'Magenta' in Color.names()", 'Magenta' in Color.names())
+    print("Action.value_of('invalid')", Action.value_of('invalid'))
+    print("Action.value_of('Bury')", Action.value_of('Bury'))
+    print('Action.Bury.name', Action.Bury.name)
 
 
 if __name__ == '__main__':

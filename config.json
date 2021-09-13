@@ -7,7 +7,6 @@
   "tag": "potential_leech",
   "flag": "",
   "disable_tooltips": false,
-  "no_bury": false,
   "ignore_new_cards": false,
   "tooltip_duration": 7,
   "action": "Bury"

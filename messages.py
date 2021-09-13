@@ -20,13 +20,16 @@
 
 from typing import List
 
+from .enums import Action
 from .config import config, get_flag_code
 
 
 def get_actions() -> List[str]:
     actions = []
-    if config['no_bury'] is False:
+    if config['action'] == Action.Bury.name:
         actions.append('buried')
+    elif config['action'] == Action.Suspend.name:
+        actions.append('suspended')
     if config['tag']:
         actions.append('tagged')
     if get_flag_code():

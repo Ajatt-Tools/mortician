@@ -159,12 +159,6 @@ class SettingsDialog(QDialog):
         self._checkboxes['disable_tooltips'].setToolTip(
             "No matter what never show tooltips."
         )
-        self._checkboxes['no_bury'].setToolTip(
-            "Never bury cards.\n"
-            "Though this option disables the main feature of the add-on,\n"
-            "you can still use it if you want to tag or flag difficult cards,\n"
-            "but keep them in the learning queue."
-        )
         self._checkboxes['ignore_new_cards'].setToolTip(
             "Don't do anything to cards in the learning queue.\n"
             "If enabled, the add-on is going to act only on cards that have graduated before."
@@ -176,6 +170,13 @@ class SettingsDialog(QDialog):
         self._edits['flag'].setToolTip(
             "Similar to \"tag\" but adds a flag to the difficult cards.\n"
             "You can filter cards by flag in the Anki Browser."
+        )
+        self._edits['action'].setToolTip(
+            "The main aciton Mortician performs on diffictult cards.\n"
+            "You can either bury such cards, suspend them or do nothing.\n"
+            "If you choose \"No\",\n"
+            "you can still tag or flag difficult cards\n"
+            "while keeping them in the learning queue."
         )
 
 
