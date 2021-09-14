@@ -5,17 +5,17 @@ from typing import Generator
 @unique
 class ConfigEnum(Enum):
     @classmethod
-    def default(cls) -> int:
+    def default(cls) -> Enum:
         for item in cls:
-            return item.value
+            return item
 
     @classmethod
-    def value_of(cls, key: str) -> int:
-        key = key.capitalize()
+    def value_of(cls, name: str) -> int:
+        name = name.capitalize()
         for item in cls:
-            if item.name == key:
+            if item.name == name:
                 return item.value
-        return cls.default()
+        return cls.default().value
 
     @classmethod
     def names(cls) -> Generator[str, None, None]:
@@ -23,7 +23,7 @@ class ConfigEnum(Enum):
 
     @classmethod
     def valid_name(cls, name: str) -> str:
-        return n if (n := name.capitalize()) in cls.names() else cls.default()
+        return n if (n := name.capitalize()) in cls.names() else cls.default().name
 
 
 class Color(ConfigEnum):
