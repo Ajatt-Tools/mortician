@@ -172,7 +172,7 @@ class SettingsDialog(QDialog):
             "You can filter cards by flag in the Anki Browser."
         )
         self._edits['action'].setToolTip(
-            "The main aciton Mortician performs on diffictult cards.\n"
+            "The main action Mortician performs on difficult cards.\n"
             "You can either bury such cards, suspend them or do nothing.\n"
             "If you choose \"No\", you can still tag or flag difficult cards\n"
             "while keeping them in the learning queue."
