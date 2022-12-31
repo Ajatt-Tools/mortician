@@ -158,6 +158,10 @@ class SettingsDialog(QDialog):
             "Don't do anything to cards in the learning queue.\n"
             "If enabled, the add-on is going to act only on cards that have graduated before."
         )
+        self._checkboxes['show_bury_browser_action'].setToolTip(
+            "Add a button to the Anki Browser's context menu\n"
+            "that lets you manually bury selected cards."
+        )
         self._edits['tag'].setToolTip(
             "This tag is attached to cards when they get buried by Mortician.\n"
             "You can use the tag to find the cards in the Anki Browser later."

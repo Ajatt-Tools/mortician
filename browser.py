@@ -12,6 +12,8 @@ from aqt.operations import CollectionOp
 from aqt.qt import *
 from aqt.utils import tooltip
 
+from .config import config
+
 
 def bury_cards(col: Collection, card_ids: Sequence[CardId]) -> OpChanges:
     pos = col.add_custom_undo_entry(_(f"Mortician: bury {len(card_ids)} cards"))
@@ -29,9 +31,10 @@ def on_bury_selected(browser: Browser) -> None:
 
 
 def setup_context_menu(browser: Browser) -> None:
-    menu = browser.form.menu_Cards
-    action = menu.addAction(_("Bury selected cards"))
-    qconnect(action.triggered, lambda: on_bury_selected(browser))
+    if config['show_bury_browser_action']:
+        menu = browser.form.menu_Cards
+        action = menu.addAction(_("Bury selected cards"))
+        qconnect(action.triggered, lambda: on_bury_selected(browser))
 
 
 def init():

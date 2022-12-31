@@ -9,5 +9,6 @@
   "disable_tooltips": false,
   "ignore_new_cards": false,
   "tooltip_duration": 7,
-  "action": "Bury"
+  "action": "Bury",
+  "show_bury_browser_action": true
 }
