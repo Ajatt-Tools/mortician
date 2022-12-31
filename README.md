@@ -20,6 +20,7 @@ Inspired by [DA KILL Z0NE](https://ankiweb.net/shared/info/1565222544).
 * Bury difficult cards if they get answered `again` too many times.
 * Tag difficult cards with a user-specified tag.
 * Add a color flag to the difficult cards.
+* Manually bury cards from the Anki Browser.
 
 ## Installation
 
