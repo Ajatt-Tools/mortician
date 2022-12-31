@@ -1,4 +1,5 @@
-from typing import Dict
+# Copyright: Ren Tatsumoto <tatsu at autistici.org>
+# License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 from aqt import mw
 from aqt.qt import *
@@ -9,7 +10,7 @@ from .consts import *
 from .enums import Color, Action
 
 
-def get_toggleables() -> Dict[str, bool]:
+def get_toggleables() -> dict[str, bool]:
     return {key: val for key, val in config.items() if type(val) == bool}
 
 
@@ -17,7 +18,7 @@ def key_to_label(key: str) -> str:
     return key.replace('_', ' ').capitalize()
 
 
-def make_checkboxes() -> Dict[str, QCheckBox]:
+def make_checkboxes() -> dict[str, QCheckBox]:
     checkboxes = {}
     for key, val in get_toggleables().items():
         label = key_to_label(key)
@@ -46,7 +47,7 @@ def make_tag_edit_widget() -> QLineEdit:
     return widget
 
 
-def make_limits_widgets() -> Dict[str, QSpinBox]:
+def make_limits_widgets() -> dict[str, QSpinBox]:
     widgets = {}
     for key in INTEGER_OPTIONS.keys():
         widgets[key] = QSpinBox()
@@ -181,7 +182,7 @@ class SettingsDialog(QDialog):
 
 def on_open_settings():
     dialog = SettingsDialog(mw)
-    dialog.exec_()
+    dialog.exec()
 
 
 def setup_settings_action(parent: QWidget) -> QAction:
