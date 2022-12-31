@@ -3,8 +3,9 @@
 
 from aqt import mw
 from aqt.qt import *
+from aqt.utils import saveGeom, restoreGeom
 
-from .ajt_common import menu_root_entry
+from .ajt_common.about_menu import menu_root_entry, tweak_window
 from .config import config, set_config_action, write_config
 from .consts import *
 from .enums import Color, Action
@@ -58,6 +59,8 @@ def make_limits_widgets() -> dict[str, QSpinBox]:
 
 
 class SettingsDialog(QDialog):
+    name = "ajt__mortician_settings_dialog"
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setWindowTitle(OPTS_WINDOW_TITLE)
@@ -73,6 +76,8 @@ class SettingsDialog(QDialog):
         self.setLayout(self.setup_layout())
         self.connect_buttons()
         self.add_tooltips()
+        tweak_window(self)
+        restoreGeom(self, self.name)
 
     def setup_layout(self) -> QLayout:
         layout = QVBoxLayout(self)
@@ -170,6 +175,10 @@ class SettingsDialog(QDialog):
             "If you choose \"No\", you can still tag or flag difficult cards\n"
             "while keeping them in the learning queue."
         )
+
+    def done(self, *args, **kwargs) -> None:
+        saveGeom(self, self.name)
+        return super().done(*args, **kwargs)
 
 
 def on_open_settings():
