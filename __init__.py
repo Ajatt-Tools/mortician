@@ -1,5 +1,5 @@
-from . import mortician
-from . import gui
+from . import mortician, gui, browser
 
 gui.init()
 mortician.init()
+browser.init()
