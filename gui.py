@@ -69,8 +69,7 @@ class SettingsDialog(QDialog):
             'flag': make_flag_edit_widget(),
         }
         self._limits = make_limits_widgets()
-        self.ok_button = QPushButton("Ok")
-        self.cancel_button = QPushButton("Cancel")
+        self._bottom_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
         self.setLayout(self.setup_layout())
         self.connect_buttons()
         self.add_tooltips()
@@ -80,22 +79,22 @@ class SettingsDialog(QDialog):
         layout.addLayout(self.make_edits_layout())
         layout.addLayout(self.make_checkboxes_layout())
         layout.addLayout(self.make_limits_layout())
-        layout.addLayout(self.make_bottom_buttons())
+        layout.addWidget(self._bottom_box)
         return layout
 
-    def make_checkboxes_layout(self) -> QGroupBox:
+    def make_checkboxes_layout(self) -> QLayout:
         layout = QVBoxLayout()
         for widget in self._checkboxes.values():
             layout.addWidget(widget)
         return layout
 
-    def make_edits_layout(self) -> QGridLayout:
+    def make_edits_layout(self) -> QLayout:
         layout = QFormLayout()
         for label, widget in self._edits.items():
             layout.addRow(label.capitalize(), widget)
         return layout
 
-    def make_limits_layout(self) -> QGridLayout:
+    def make_limits_layout(self) -> QLayout:
         layout = QGridLayout()
         lines = zip(
             (QLabel(key_to_label(key)) for key in self._limits.keys()),
@@ -109,18 +108,11 @@ class SettingsDialog(QDialog):
 
         return layout
 
-    def make_bottom_buttons(self) -> QBoxLayout:
-        layout = QHBoxLayout()
-        layout.addWidget(self.ok_button)
-        layout.addWidget(self.cancel_button)
-        layout.addStretch()
-        return layout
-
     def connect_buttons(self):
-        self.ok_button.clicked.connect(self.on_confirm)
-        self.cancel_button.clicked.connect(self.reject)
+        qconnect(self._bottom_box.accepted, self.accept)
+        qconnect(self._bottom_box.rejected, self.reject)
 
-    def on_confirm(self):
+    def accept(self):
         for key, widget in self._checkboxes.items():
             config[key] = widget.isChecked()
         for key, widget in self._limits.items():
@@ -128,7 +120,7 @@ class SettingsDialog(QDialog):
         for key, widget in self._edits.items():
             config[key] = widget.currentText()
         write_config()
-        self.accept()
+        return super().accept()
 
     def add_tooltips(self):
         self._limits['again_threshold'].setToolTip(
