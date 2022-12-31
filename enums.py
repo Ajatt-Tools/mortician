@@ -9,8 +9,7 @@ from typing import Generator
 class ConfigEnum(Enum):
     @classmethod
     def default(cls) -> Enum:
-        for item in cls:
-            return item
+        return next(item for item in cls)
 
     @classmethod
     def value_of(cls, name: str) -> int:

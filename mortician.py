@@ -1,16 +1,17 @@
 # Copyright: Ren Tatsumoto <tatsu at autistici.org>
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
-from typing import Literal
+from typing import Literal, cast
 
 from anki.cards import Card
 from anki.collection import Collection
 from aqt import gui_hooks
 from aqt.operations import CollectionOp, ResultWithChanges
+from aqt.qt import QWidget
 from aqt.reviewer import Reviewer
 from aqt.utils import tooltip
 
-from .config import config, get_flag_code
+from .config import config
 from .consts import *
 from .enums import Action
 from .messages import action_msg, info_msg
@@ -20,7 +21,7 @@ from .timeframe import TimeFrame, agains_in_the_timeframe, time_passed
 def notify(msg: str):
     print(msg)
     if config['disable_tooltips'] is False:
-        tooltip(msg, period=TimeFrame(seconds=config.get('tooltip_duration')).milliseconds())
+        tooltip(msg, period=TimeFrame(seconds=config['tooltip_duration']).milliseconds())
 
 
 def sched_reset(col: Collection) -> None:
@@ -36,7 +37,7 @@ def act_on_card(col: Collection, card: Card) -> ResultWithChanges:
         note.add_tag(config['tag'])
         col.update_note(note)
 
-    if (color_code := get_flag_code()) and card.user_flag() != color_code:
+    if (color_code := config.get_flag_code()) and card.user_flag() != color_code:
         col.set_user_flag_for_cards(color_code, cids=[card.id, ])
 
     if config['action'] == Action.Bury.name:
@@ -52,9 +53,9 @@ def act_on_card(col: Collection, card: Card) -> ResultWithChanges:
 def threshold(card: Card) -> int:
     """Returns again threshold for the card, depending on its queue type."""
     if not card.type or card.type <= TYPE_LEARNING:
-        return config.get('new_again_threshold', DEFAULT_THRESHOLD)
+        return config['new_again_threshold']
     else:
-        return config.get('again_threshold', DEFAULT_THRESHOLD)
+        return config['again_threshold']
 
 
 def on_did_answer_card(reviewer: Reviewer, card: Card, ease: Literal[1, 2, 3, 4]) -> None:
@@ -73,7 +74,7 @@ def on_did_answer_card(reviewer: Reviewer, card: Card, ease: Literal[1, 2, 3, 4]
     if agains >= threshold(card):
         if any((config['tag'], config['flag'], config['action'] != Action.No.name)):
             CollectionOp(
-                parent=reviewer.web, op=lambda col: act_on_card(col, card)
+                parent=cast(QWidget, reviewer.web), op=lambda col: act_on_card(col, card)
             ).success(
                 lambda out: notify(action_msg(agains, passed)) if out else None
             ).run_in_background()

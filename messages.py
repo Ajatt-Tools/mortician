@@ -1,7 +1,7 @@
 # Copyright: Ren Tatsumoto <tatsu at autistici.org>
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
-from .config import config, get_flag_code
+from .config import config
 from .enums import Action
 
 
@@ -13,7 +13,7 @@ def get_actions() -> list[str]:
         actions.append('suspended')
     if config['tag']:
         actions.append('tagged')
-    if get_flag_code():
+    if config.get_flag_code():
         actions.append('flagged')
     return actions
 

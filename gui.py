@@ -6,13 +6,10 @@ from aqt.qt import *
 from aqt.utils import saveGeom, restoreGeom
 
 from .ajt_common.about_menu import menu_root_entry, tweak_window
-from .config import config, set_config_action, write_config
+from .ajt_common.addon_config import set_config_action
+from .config import config
 from .consts import *
 from .enums import Color, Action
-
-
-def get_toggleables() -> dict[str, bool]:
-    return {key: val for key, val in config.items() if type(val) == bool}
 
 
 def key_to_label(key: str) -> str:
@@ -21,7 +18,7 @@ def key_to_label(key: str) -> str:
 
 def make_checkboxes() -> dict[str, QCheckBox]:
     checkboxes = {}
-    for key, val in get_toggleables().items():
+    for key, val in config.toggleables():
         label = key_to_label(key)
         checkboxes[key] = QCheckBox(label)
         checkboxes[key].setChecked(config[key])
@@ -66,7 +63,7 @@ class SettingsDialog(QDialog):
         self.setWindowTitle(OPTS_WINDOW_TITLE)
         self.setMinimumSize(320, 240)
         self._checkboxes = make_checkboxes()
-        self._edits = {
+        self._edits: dict[str, QComboBox] = {
             'action': make_action_edit_widget(),
             'tag': make_tag_edit_widget(),
             'flag': make_flag_edit_widget(),
@@ -124,7 +121,7 @@ class SettingsDialog(QDialog):
             config[key] = int(widget.value())
         for key, widget in self._edits.items():
             config[key] = widget.currentText()
-        write_config()
+        config.write_config()
         return super().accept()
 
     def add_tooltips(self):
