@@ -2,7 +2,7 @@
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 from enum import Enum, unique, auto
-from typing import Generator
+from typing import Iterable
 
 
 @unique
@@ -20,7 +20,7 @@ class ConfigEnum(Enum):
         return cls.default().value
 
     @classmethod
-    def names(cls) -> Generator[str, None, None]:
+    def names(cls) -> Iterable[str]:
         return (item.name for item in cls)
 
     @classmethod
