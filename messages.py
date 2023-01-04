@@ -7,9 +7,9 @@ from .enums import Action
 
 def get_actions() -> list[str]:
     actions = []
-    if config['action'] == Action.Bury.name:
+    if config.action == Action.Bury:
         actions.append('buried')
-    elif config['action'] == Action.Suspend.name:
+    elif config.action == Action.Suspend:
         actions.append('suspended')
     if config['tag']:
         actions.append('tagged')

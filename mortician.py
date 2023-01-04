@@ -40,10 +40,10 @@ def act_on_card(col: Collection, card: Card) -> ResultWithChanges:
     if (color_code := config.get_flag_code()) and card.user_flag() != color_code:
         col.set_user_flag_for_cards(color_code, cids=[card.id, ])
 
-    if config['action'] == Action.Bury.name:
+    if config.action == Action.Bury:
         col.sched.bury_cards(ids=[card.id, ], manual=False)
         sched_reset(col)
-    elif config['action'] == Action.Suspend.name:
+    elif config.action == Action.Suspend:
         col.sched.suspend_cards(ids=[card.id, ])
         sched_reset(col)
 
@@ -72,7 +72,7 @@ def on_did_answer_card(reviewer: Reviewer, card: Card, ease: Literal[1, 2, 3, 4]
     passed = time_passed().hours()
 
     if agains >= threshold(card):
-        if any((config['tag'], config['flag'], config['action'] != Action.No.name)):
+        if config['tag'] or config['flag'] or config.action != Action.No:
             CollectionOp(
                 parent=cast(QWidget, reviewer.web), op=lambda col: act_on_card(col, card)
             ).success(

@@ -4,7 +4,7 @@
 from typing import Optional
 
 from .ajt_common.addon_config import AddonConfigManager
-from .enums import Color
+from .enums import Color, Action
 
 
 class MorticianConfig(AddonConfigManager):
@@ -13,6 +13,10 @@ class MorticianConfig(AddonConfigManager):
             return color_code
         else:
             return None
+
+    @property
+    def action(self) -> Action:
+        return Action[self['action']] if self['action'] in Action.names() else Action.default()
 
 
 config = MorticianConfig()

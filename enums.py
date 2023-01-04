@@ -1,14 +1,14 @@
 # Copyright: Ren Tatsumoto <tatsu at autistici.org>
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
-from enum import Enum, unique, auto
+import enum
 from typing import Iterable
 
 
-@unique
-class ConfigEnum(Enum):
+@enum.unique
+class ConfigEnum(enum.Enum):
     @classmethod
-    def default(cls) -> Enum:
+    def default(cls) -> enum.Enum:
         return next(item for item in cls)
 
     @classmethod
@@ -38,12 +38,13 @@ class Color(ConfigEnum):
 
 
 class Action(ConfigEnum):
-    No = auto()
-    Bury = auto()
-    Suspend = auto()
+    No = enum.auto()
+    Bury = enum.auto()
+    Suspend = enum.auto()
 
 
 def main():
+    print("Action['Bury']", Action['Bury'])
     print("Color.value_of('invalid')", Color.value_of('invalid'))
     print("Color.value_of('Red')", Color.value_of('Red'))
     print("'Red' in Color.names()", 'Red' in Color.names())
