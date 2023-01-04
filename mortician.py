@@ -13,7 +13,7 @@ from aqt.utils import tooltip
 
 from .config import config
 from .consts import *
-from .enums import Action
+from .enums import Action, Color
 from .messages import action_msg, info_msg
 from .timeframe import TimeFrame, agains_in_the_timeframe, time_passed
 
@@ -37,8 +37,8 @@ def act_on_card(col: Collection, card: Card) -> ResultWithChanges:
         note.add_tag(config['tag'])
         col.update_note(note)
 
-    if (color_code := config.get_flag_code()) and card.user_flag() != color_code:
-        col.set_user_flag_for_cards(color_code, cids=[card.id, ])
+    if config.flag != Color.No != Color(card.user_flag()):
+        col.set_user_flag_for_cards(config.flag.value, cids=[card.id, ])
 
     if config.action == Action.Bury:
         col.sched.bury_cards(ids=[card.id, ], manual=False)

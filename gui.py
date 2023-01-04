@@ -28,14 +28,14 @@ def make_checkboxes() -> dict[str, QCheckBox]:
 def make_flag_edit_widget() -> QComboBox:
     flag_edit = QComboBox()
     flag_edit.addItems(Color.names())
-    flag_edit.setCurrentIndex(Color.value_of(config['flag']))
+    flag_edit.setCurrentText(config['flag'])
     return flag_edit
 
 
 def make_action_edit_widget() -> QComboBox:
     action_edit = QComboBox()
     action_edit.addItems(Action.names())
-    action_edit.setCurrentText(Action.valid_name(config['action']))
+    action_edit.setCurrentText(config['action'])
     return action_edit
 
 

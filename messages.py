@@ -2,7 +2,7 @@
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 from .config import config
-from .enums import Action
+from .enums import Action, Color
 
 
 def get_actions() -> list[str]:
@@ -13,7 +13,7 @@ def get_actions() -> list[str]:
         actions.append('suspended')
     if config['tag']:
         actions.append('tagged')
-    if config.get_flag_code():
+    if config.flag != Color.No:
         actions.append('flagged')
     return actions
 
