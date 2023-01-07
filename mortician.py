@@ -37,7 +37,7 @@ def act_on_card(col: Collection, card: Card) -> ResultWithChanges:
         note.add_tag(config['tag'])
         col.update_note(note)
 
-    if config.flag != Color.No != Color(card.user_flag()):
+    if Color.No != config.flag != Color(card.user_flag()):
         col.set_user_flag_for_cards(config.flag.value, cids=[card.id, ])
 
     if config.action == Action.Bury:
