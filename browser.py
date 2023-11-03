@@ -2,7 +2,7 @@
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 from gettext import gettext as _, ngettext
-from typing import Sequence
+from collections.abc import Sequence
 
 from anki.cards import CardId, Card
 from anki.collection import Collection, OpChanges
