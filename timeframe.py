@@ -25,10 +25,10 @@ class TimeFrame:
     def milliseconds_to_hours(cls, milliseconds: float) -> float:
         return milliseconds / 1000.0 / 3600.0
 
-    def __sub__(self, other: 'TimeFrame') -> 'TimeFrame':
+    def __sub__(self, other: "TimeFrame") -> "TimeFrame":
         return TimeFrame(milliseconds=self._milliseconds - other._milliseconds)
 
-    def __add__(self, other: 'TimeFrame') -> 'TimeFrame':
+    def __add__(self, other: "TimeFrame") -> "TimeFrame":
         return TimeFrame(milliseconds=self._milliseconds + other._milliseconds)
 
     def milliseconds(self) -> int:
@@ -45,7 +45,7 @@ def current_time() -> TimeFrame:
 def next_day_start() -> TimeFrame:
     """
     Returns point in time when the next anki day starts.
-    For me it's 4AM on the next day.
+    For me, it's 4AM on the next day.
     """
     return TimeFrame(seconds=mw.col.sched.dayCutoff)
 
@@ -55,17 +55,17 @@ def this_day_start() -> TimeFrame:
 
 
 def threshold_time() -> TimeFrame:
-    if config['count_from_daystart'] is True:
+    if config["count_from_daystart"] is True:
         return this_day_start()
     else:
-        return current_time() - TimeFrame(hours=config['timeframe'])
+        return current_time() - TimeFrame(hours=config["timeframe"])
 
 
 def time_passed() -> TimeFrame:
-    if config['count_from_daystart'] is True:
+    if config["count_from_daystart"] is True:
         return current_time() - this_day_start()
     else:
-        return TimeFrame(hours=config['timeframe'])
+        return TimeFrame(hours=config["timeframe"])
 
 
 def agains_in_the_timeframe(card_id: CardId) -> int:
@@ -74,5 +74,5 @@ def agains_in_the_timeframe(card_id: CardId) -> int:
     return mw.col.db.scalar(
         "select count() from revlog where ease = 1 and cid = ? and id >= ?",
         card_id,
-        threshold_time().milliseconds()
+        threshold_time().milliseconds(),
     )

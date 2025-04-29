@@ -1,4 +1,4 @@
-from . import mortician, gui, browser
+from . import browser, gui, mortician
 
 gui.init()
 mortician.init()

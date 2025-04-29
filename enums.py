@@ -17,7 +17,8 @@ class ConfigEnum(enum.Enum):
 
 
 class Color(ConfigEnum):
-    """ https://github.com/ankidroid/Anki-Android/wiki/Database-Structure#cards """
+    """https://github.com/ankidroid/Anki-Android/wiki/Database-Structure#cards"""
+
     No = 0
     Red = 1
     Orange = 2
@@ -33,12 +34,12 @@ class Action(ConfigEnum):
 
 
 def main():
-    print("Action['Bury']", Action['Bury'])
+    print("Action['Bury']", Action["Bury"])
     print("Color(1)", Color(1))
-    print("'Red' in Color.names()", 'Red' in Color.names())
-    print("'Magenta' in Color.names()", 'Magenta' in Color.names())
-    print('Action.Bury.name', Action.Bury.name)
+    print("'Red' in Color.names()", "Red" in Color.names())
+    print("'Magenta' in Color.names()", "Magenta" in Color.names())
+    print("Action.Bury.name", Action.Bury.name)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
