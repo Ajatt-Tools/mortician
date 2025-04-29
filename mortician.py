@@ -46,6 +46,8 @@ def act_on_card(col: Collection, card: Card) -> ResultWithChanges:
     elif config.action == Action.Suspend:
         col.sched.suspend_cards(ids=[card.id, ])
         sched_reset(col)
+    elif config.action == Action.Delete:
+        col.remove_notes_by_card(card_ids=[card.id, ])
 
     return col.merge_undo_entries(pos)
 

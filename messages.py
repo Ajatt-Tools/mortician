@@ -11,6 +11,8 @@ def get_actions() -> list[str]:
         actions.append('buried')
     elif config.action == Action.Suspend:
         actions.append('suspended')
+    elif config.action == Action.Delete:
+        actions.append('deleted')
     if config['tag']:
         actions.append('tagged')
     if config.flag != Color.No:
