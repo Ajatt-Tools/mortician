@@ -29,6 +29,7 @@ class Action(ConfigEnum):
     No = enum.auto()
     Bury = enum.auto()
     Suspend = enum.auto()
+    Delete = enum.auto()
 
 
 def main():

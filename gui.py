@@ -172,7 +172,7 @@ class SettingsDialog(QDialog):
         )
         self._edits['action'].setToolTip(
             "The main action Mortician performs on difficult cards.\n"
-            "You can either bury such cards, suspend them or do nothing.\n"
+            "You can either bury such cards, suspend them, delete them or do nothing.\n"
             "If you choose \"No\", you can still tag or flag difficult cards\n"
             "while keeping them in the learning queue."
         )
