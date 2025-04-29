@@ -2,22 +2,22 @@
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 from .ajt_common.addon_config import AddonConfigManager
-from .enums import Color, Action
+from .enums import Action, Color
 
 
 class MorticianConfig(AddonConfigManager):
     @property
     def flag(self) -> Color:
-        if (name := self['flag'].capitalize()) in Color.names():
-            return Color[name]
-        else:
+        try:
+            return Color[self["flag"].capitalize()]
+        except KeyError:
             return Color.default()
 
     @property
     def action(self) -> Action:
-        if (name := self['action'].capitalize()) in Action.names():
-            return Action[name]
-        else:
+        try:
+            return Action[self["action"].capitalize()]
+        except KeyError:
             return Action.default()
 
 
