@@ -3,3 +3,4 @@ __pycache__
 /manifest.json
 /meta.json
 /*.ankiaddon
+.mypy_cache
