@@ -24,10 +24,15 @@ Inspired by [DA KILL Z0NE](https://ankiweb.net/shared/info/1565222544).
 
 ## Installation
 
-Install from [AnkiWeb](https://ankiweb.net/shared/info/1255924302), or manually with `git`:
+Install from [AnkiWeb](https://ankiweb.net/shared/info/1255924302).
 
-```
-git clone 'https://github.com/Ajatt-Tools/mortician.git' ~/.local/share/Anki2/addons21/mortician
+## Contributing
+
+Install manually with `git`:
+
+```bash
+git clone 'https://github.com/Ajatt-Tools/mortician.git'
+ln -sr mortician/mortician ~/.local/share/Anki2/addons21/mortician
 ```
 
 ## Configuration
